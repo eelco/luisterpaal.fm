@@ -1,0 +1,7 @@
+Last.fm Scrobbler for the 3VOOR12 Luisterpaal
+=============================================
+
+* Compile the server
+* Make sure static/index.html exists
+* Start the server with ./Main <api_key> <api_secret>
+* Go to http://127.0.0.1:8016
