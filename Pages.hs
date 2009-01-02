@@ -20,7 +20,8 @@ stylesheet uri = thelink noHtml ! [ rel "stylesheet", href uri ]
 luisterpaal :: HTML a => a -> Html
 luisterpaal content = layout 
     [ thediv ! [ identifier "luisterpaal" ] << ""
-    ] +++ content
+    , thediv ! [ identifier "content"     ] << content
+    ]
 
 welcome key = layout 
     [ h1 << "Welkom!"
@@ -37,7 +38,7 @@ welcome key = layout
         ]
     ]
 
-welcomeBack user = luisterpaal $ thediv ! [ identifier "content" ] <<
+welcomeBack user = luisterpaal $
     [ h1 << ("Welkom terug, " ++ user ++ "!")
     , p  << "Goed je weer te zien.  Klaar om de 3VOOR12 Luisterpaal te starten?"
     , button ! [ name "yes" ] << "Ja, starten maar!"
