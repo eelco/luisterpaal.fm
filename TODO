@@ -8,10 +8,10 @@ Todo:
 [ ] P U - Handle errors from the handshaking as much as possible (before throwing an error to the user)
 [ ] P C - Handle response codes from now playing and submission protocol correctly
 [ ] P U - Get/create/mashup a logo for on the Last.fm page
-[ ] A E - Read the API values from a file
 [ ] A C - Waiting for: a real client id
 
 Done:
+[x] A E - Read the API values from a file
 [x] A E - Extract JavaScript into a static file
 [x] P U - Create a 'front page' that explains the user what will happen, instead of just redirecting
 [x] P U - Create a session cookie, so that authentication only needs to happen once

@@ -2,6 +2,8 @@ Last.fm Scrobbler for the 3VOOR12 Luisterpaal
 =============================================
 
 * Compile the server
-* Make sure static/index.html exists
-* Start the server with ./Main <api_key> <api_secret>
+* Create a file called '.last.fm' with your Last.fm API key and secret seperated by (any form of) whitespace
+* Start the server with ./Main from the directory containing the static/ dir and the .last.fm file.
+* Set the Callback URL for your API key to http://127.0.0.1:8016
 * Go to http://127.0.0.1:8016
+* Enjoy

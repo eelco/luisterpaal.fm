@@ -10,7 +10,7 @@ import Pages
 
 main :: IO ()
 main = do
-    (key : secret : []) <- getArgs 
+    (key, secret) <- getApiCreds
     simpleHTTP (nullConf { port = 8016 })
         [ withData    (\token -> [ anyRequest $ createSession key secret token ]) -- Callback URL
         , withData    (\session -> [anyRequest $ shakeHands key secret session]) 
@@ -22,6 +22,13 @@ main = do
         , dir "proxy" [ proxyServe ["*.audioscrobbler.com:80"] ]
         , fileServe [] "static"
         ]
+
+-- Reading the Last.fm API credentials
+getApiCreds :: IO (Key, Secret)
+getApiCreds = do
+    args               <- getArgs
+    (key : secret : _) <- readFile (head (args ++ [".last.fm"])) >>= return . words
+    return (key, secret)
 
 -- Parsing submitted data
 
