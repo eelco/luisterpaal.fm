@@ -1,4 +1,3 @@
-{-# LANGUAGE FlexibleInstances #-}
 module LastFm where
 
 import Control.Applicative
@@ -81,9 +80,6 @@ sessionRequest key secret token = flattenParams $ M.insert "api_sig" (signReques
                     , "api_key" * key
                     ]
 
-flattenParams :: Params -> String
-flattenParams = concat . intersperse "&" . map (\(k, v) -> k ++ '=' :  v) . M.toList
-
 signRequest :: Params -> Secret -> String
 signRequest params secret = md5sum $ U.fromString $ concatMap (\(k, v) -> k ++ v) (M.toAscList params) ++ secret
 
@@ -122,3 +118,9 @@ parseHandshake :: String -> H.Result Handshake
 parseHandshake response = case lines response of
     ["OK", key, npurl, surl] -> Right $ Handshake key npurl surl
     err                      -> Left  $ ErrorMisc ("Handshake failed: " ++ (unlines err))
+
+-- Utils
+
+flattenParams :: Params -> String
+flattenParams = concat . intersperse "&" . map (\(k, v) -> k ++ '=' :  v) . M.toList
+
