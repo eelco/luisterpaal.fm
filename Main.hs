@@ -15,7 +15,7 @@ main = do
         [ withData    (\token -> [ anyRequest $ createSession key secret token ]) -- Callback URL
         , withData    (\session -> [anyRequest $ shakeHands key secret session]) 
 
-        , root [ withDataFn userCookie (\user -> [ anyRequest $ respond ok $ welcome_back user ])
+        , root [ withDataFn userCookie (\user -> [ anyRequest $ respond ok $ welcomeBack user ])
                , anyRequest $ respond ok (welcome key)
                ]
 
