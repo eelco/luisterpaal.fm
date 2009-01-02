@@ -111,16 +111,16 @@ function stop() {
 
     // TODO Check response
     $.post("proxy/" + su
-          , { s: sk
-            , a: track.a
-            , t: track.t
-            , i: track.i
-            , o: "P"
-            , r: ""
-            , b: track.b
-            , l: track.l
-            , n: track.n
-            , m: ""
+          , { "s"   : sk
+            , "a[0]": track.a
+            , "t[0]": track.t
+            , "i[0]": track.i
+            , "o[0]": "P"
+            , "r[0]": ""
+            , "b[0]": track.b
+            , "l[0]": track.l
+            , "n[0]": track.n
+            , "m[0]": ""
             }
           );
 }
