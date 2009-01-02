@@ -35,7 +35,7 @@ type Token  = String
 type Params = M.Map String String
 
 data Session = Session User Key deriving Show
-data Handshake = Handshake { sessionID     :: String
+data Handshake = Handshake { session_key   :: Key
                            , npURL         :: String
                            , submissionURL :: String
                            } deriving (Show)

@@ -12,11 +12,14 @@ main :: IO ()
 main = do
     (key : secret : []) <- getArgs 
     simpleHTTP (nullConf { port = 8016 })
-        [ dir "key"       [ anyRequest $ respond ok key ]
-        , dir "handshake" [ withData (\session -> [anyRequest $ shakeHands key secret session]) ]
-        , dir "proxy"     [ proxyServe ["*.audioscrobbler.com:80"] ]
-        , withData (\token -> [ anyRequest $ createSession key secret token ]) -- Callback URL
-        , root $ respond ok frontpage
+        [ withData    (\token -> [ anyRequest $ createSession key secret token ]) -- Callback URL
+        , withData    (\session -> [anyRequest $ shakeHands key secret session]) 
+
+        , root [ withDataFn userCookie (\user -> [ anyRequest $ respond ok $ welcome_back user ])
+               , anyRequest $ respond ok (welcome key)
+               ]
+
+        , dir "proxy" [ proxyServe ["*.audioscrobbler.com:80"] ]
         , fileServe [] "static"
         ]
 
@@ -29,6 +32,9 @@ instance FromData Session where
     fromData = do u <- look "user"
                   k <- look "key"
                   return $ Session u k
+
+userCookie :: RqData User
+userCookie = lookCookieValue "session" >>= return . takeWhile (/=':')
 
 -- Handlers
 
@@ -50,10 +56,10 @@ shakeHands key secret session = do
 
 -- Utilities
 
-root :: Monad m => WebT m a -> ServerPartT m a
-root handle = withRequest isRoot
-    where isRoot rq | null $ rqPaths rq = handle
-                    | otherwise         = noHandle
+root :: Monad m => [ServerPartT m a] -> ServerPartT m a
+root handle = ServerPartT $ \rq -> case rqPaths rq of
+                [] -> unServerPartT (multi handle) rq
+                _  -> noHandle
 
 redir :: String -> Web Response 
 redir u = found u (toResponse "")

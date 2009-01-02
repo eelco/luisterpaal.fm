@@ -9,14 +9,11 @@ var track; // Currently playing track
 $(function() {
     var token = getSessionToken();
 
-    if (token == undefined) {
-        // TODO Explain to user how this will work before redirecting.
-        $.get("key", {}, getNewToken)
-        return;
-    } // else
+    if (token == undefined) return;
+    // else
 
     // TODO Get a new token when the handshake fails
-    $.getJSON("handshake/?" + $.param(token), onHandshake)
+    $.getJSON("?" + $.param(token), onHandshake)
 });
 
 function onHandshake(handshake) {
@@ -42,15 +39,6 @@ function getSessionToken() {
         var [ user, key ] = token.replace(/"/g,'').split(':');
         return { user: user, key: key }
     }
-}
-
-function getCallbackToken() {
-    var match = window.location.search.match(/\?token=([^&]+)/)
-    if (match) return match[1]
-}
-
-function getNewToken(key) {
-    window.location.href = 'http://www.last.fm/api/auth?api_key=' + key;
 }
 
 function onLPLoad() {
