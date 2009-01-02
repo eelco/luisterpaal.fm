@@ -27,16 +27,16 @@ $(function() {
     $.getJSON("?" + $.param(token), onHandshake)
 });
 
-function onHandshake(handshake) {
-    if (handshake.error != undefined) {
-        alert("Ah verdorie, er ging iets mis. (" + handshake.error + ")");
+function onHandshake(response) {
+    if (response.error != undefined) {
+        alert("Ah verdorie, er ging iets mis. (" + response.error + ")");
         return;
     } // else
 
-    [sk,np,su] = handshake.handshake;
-    np = np.replace('http://', '');
-    su = su.replace('http://', '');
-
+    var handshake = response.handshake;
+    sk = handshake[0];
+    np = handshake[1].replace('http://', '');
+    su = handshake[2].replace('http://', '');
 
     swfobject.embedSWF("http://download.omroep.nl/vpro/luisterpaal/"+
                        "widgets/LuisterpaalEvents.swf?oninit=onLPLoad",
