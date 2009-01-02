@@ -3,15 +3,18 @@
 import Control.Monad
 import Control.Monad.Trans
 import System.Environment
+import qualified Data.ByteString.Char8 as B
+import qualified Data.Map as M
 
 import HAppS.Server
 import LastFm
 import Pages
+import Cookies
 
 main :: IO ()
 main = do
     (key, secret) <- getApiCreds
-    simpleHTTP (nullConf { port = 8016 })
+    simpleHTTP (nullConf { port = 8016 }) $ serve
         [ withData    (\token -> [ anyRequest $ createSession key secret token ]) -- Callback URL
         , withData    (\session -> [anyRequest $ shakeHands key secret session]) 
 
@@ -73,3 +76,18 @@ redir u = found u (toResponse "")
 
 respond :: ToMessage a => (Response -> Web Response) -> a -> Web Response
 respond with = with . toResponse
+
+serve :: [ServerPart a] -> [ServerPart a]
+serve handle = [ ServerPartT $ \rq -> unServerPartT (multi handle) (fixCookies rq) ]
+
+fixCookies :: Request -> Request
+fixCookies req = 
+  if rqCookies req == [] 
+      then case lookHeader "cookie" $ rqHeaders req of
+              Nothing      -> req
+              Just cookies -> req  { rqCookies = cookiefy $ parseCookies cookies }
+      else req
+  where cookiefy cs = zip (map cookieName cs) cs
+
+lookHeader :: String -> Headers -> Maybe String
+lookHeader name headers = M.lookup (B.pack name) headers >>= return . B.unpack . head . hValue
