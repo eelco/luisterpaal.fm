@@ -10,7 +10,6 @@ $(function() {
     $('button[name=yes]').click(function(){
         $('#content').fadeOut("normal", function(){ $(this).hide() });
         $('#luisterpaal').show();
-        $('#status').show();
     });
 
     $('button[name=no]').click(function(){

@@ -20,7 +20,6 @@ stylesheet uri = thelink noHtml ! [ rel "stylesheet", href uri ]
 luisterpaal :: HTML a => a -> Html
 luisterpaal content = layout 
     [ thediv ! [ identifier "luisterpaal" ] << ""
-    , thediv ! [ identifier "status"      ] << ""
     ] +++ content
 
 welcome key = layout 

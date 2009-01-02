@@ -9,3 +9,6 @@
     position: absolute;
     top: 0;
 }
+button, input[type=submit] {
+    font-size: 1em;
+}
