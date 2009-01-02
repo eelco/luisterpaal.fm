@@ -8,6 +8,8 @@
 #content {
     position: absolute;
     top: 0;
+    background: white;
+    height: 100%
 }
 button, input[type=submit] {
     font-size: 1em;
