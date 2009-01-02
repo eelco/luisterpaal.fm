@@ -104,8 +104,8 @@ handshakeQuery key secret username session_key = do
     return $ flattenParams $ M.fromList -- Uhg
         [ "hs"         * "true"
         , "p"          * "1.2.1"
-        , "c"          * "tst" -- TODO Register the client
-        , "v"          * "1.0"
+        , "c"          * "lst" -- NOTE Please don't use this id if you're running a modified server.
+        , "v"          * "0.1"
         , "u"          * username
         , "t"          * timestamp
         , "a"          * md5sum (U.fromString $ secret ++ timestamp)
