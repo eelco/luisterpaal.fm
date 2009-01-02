@@ -30,7 +30,7 @@ $(function() {
 
 function onHandshake(handshake) {
     if (handshake.error != undefined) {
-        alert("Ah bummer, something went wrong. (" + handshake.error + ")");
+        alert("Ah verdorie, er ging iets mis. (" + handshake.error + ")");
         return;
     } // else
 
