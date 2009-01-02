@@ -47,9 +47,8 @@ function onHandshake(handshake) {
 function getSessionToken() {
     var token = readCookie("session");
     if (token) {
-        var user, key;
-        [ user, key ] = token.replace(/"/g,'').split(':');
-        return { user: user, key: key }
+        var session = token.replace(/"/g,'').split(':');
+        return { user: session[0], key: session[1] }
     }
 }
 
