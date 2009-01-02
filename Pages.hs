@@ -38,8 +38,8 @@ welcome key = layout
         ]
     ]
 
-welcome_back user = luisterpaal
-    [ h1 << ("Welkom terug, " ++ user)
+welcome_back user = luisterpaal $ thediv ! [ identifier "content" ] <<
+    [ h1 << ("Welkom terug, " ++ user ++ "!")
     , p  << "Goed je weer te zien.  Klaar om de 3VOOR12 Luisterpaal te starten?"
     , button ! [ name "yes" ] << "Ja, starten maar!"
     , button ! [ name "no" ]  << ("Nee, wacht!  Ik ben niet " ++ user)

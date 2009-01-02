@@ -2,3 +2,10 @@
     font-family: Helvetica, Verdana, sans-serif;
     color: #333;
 }
+#luisterpaal {
+    display: none;
+}
+#content {
+    position: absolute;
+    top: 0;
+}

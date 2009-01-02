@@ -3,16 +3,19 @@ Legend:
   C = Completeness        A = Action
   E = Elegance
 
-[ ] A E - Extract JavaScript into a static file
+Todo:
 [ ] A C - Waiting for: a real client id
 [ ] P U - Add a status div reporting on actions
-[ ] P U - Create a session cookie, so that authentication only needs to happen once
-    [x] P - Split getting the session key and handshaking
-    [ ] P - Create a series of frontpages
-        [x] A - Not authenticated frontpage
-        [ ] A - Authenticated (start / start as other user) (support multiple users/sessions?)
-[ ] P U - Create a 'front page' that explains the user what will happen, instead of just redirecting
 [ ] P U - Handle errors from the handshaking as much as possible (before throwing an error to the user)
 [ ] P C - Handle response codes from now playing and submission protocol correctly
 [ ] P U - Get/create/mashup a logo for on the Last.fm page
 [ ] A E - Read the API values from a file
+
+Done:
+[x] A E - Extract JavaScript into a static file
+[x] P U - Create a 'front page' that explains the user what will happen, instead of just redirecting
+[x] P U - Create a session cookie, so that authentication only needs to happen once
+    [x] P - Split getting the session key and handshaking
+    [x] P - Create a series of frontpages
+        [x] A - Not authenticated frontpage
+        [x] A - Authenticated (start / start as other user) (support multiple users/sessions?)

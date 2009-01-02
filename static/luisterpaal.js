@@ -7,6 +7,18 @@ var track; // Currently playing track
 // TODO Add a div with status messages.
 
 $(function() {
+    $('button[name=yes]').click(function(){
+        $('#content').fadeOut("normal", function(){ $(this).hide() });
+        $('#luisterpaal').show();
+        $('#status').show();
+    });
+
+    $('button[name=no]').click(function(){
+        eraseCookie("session");
+        window.location.href = '.'; // Reload
+    });
+    
+    // Initialize luisterpaal
     var token = getSessionToken();
 
     if (token == undefined) return;
@@ -36,7 +48,8 @@ function onHandshake(handshake) {
 function getSessionToken() {
     var token = readCookie("session");
     if (token) {
-        var [ user, key ] = token.replace(/"/g,'').split(':');
+        var user, key;
+        [ user, key ] = token.replace(/"/g,'').split(':');
         return { user: user, key: key }
     }
 }
@@ -128,7 +141,7 @@ function resume() {
 }
 
 function now() {
-    return Math.round((new Date()).valueOf() / 1000);
+    return Math.round(new Date().getTime() / 1000);
 }
 
 // From: PPK, http://www.quirksmode.org/js/cookies.html#doccookie
@@ -141,4 +154,10 @@ function readCookie(name) {
             if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
     }
     return null;
+}
+
+function eraseCookie(name) {
+    var date = new Date();
+	date.setTime(date.getTime() - 3600);
+	document.cookie = name+"="+";expires="+date.toGMTString()+"; path=/";
 }
