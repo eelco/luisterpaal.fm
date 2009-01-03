@@ -2,12 +2,16 @@ Last.fm Scrobbler for the 3VOOR12 Luisterpaal
 =============================================
 
 * Compile the server
+  - Run 'cabal configure'
+  - Run 'cabal build'
+  - (Optional, fix missing dependencies and repeat)
 * Create a file called '.last.fm' with, in order, seperated by (any form of) whitespace
   - Your Last.fm API key    (required)
   - Your Last.fm API secret (required)
   - Your client id          (optional, unless client version is given; default: 'tst')
   - Your client version     (optional, default '1.0')
-* Start the server with ./Main from the directory containing the static/ dir and the .last.fm file.
+* Start the server with from the directory containing the static/ dir and the .last.fm file.
+  - The executable should be at ./dist/build/Luisterpaal/Luisterpaal
 * In your Last.fm API profile, set the Callback URL to http://127.0.0.1:8016
 * Go to http://127.0.0.1:8016
 * Enjoy!
