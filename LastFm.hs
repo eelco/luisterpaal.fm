@@ -34,10 +34,16 @@ type Token  = String
 type Params = M.Map String String
 
 data Session = Session User Key deriving Show
-data Handshake = Handshake { session_key   :: Key
-                           , npURL         :: String
-                           , submissionURL :: String
+data Handshake = Handshake { session_key    :: Key
+                           , np_url         :: String
+                           , submission_url :: String
                            } deriving (Show)
+
+data ClientConf = ClientConf { api_key        :: Key
+                             , api_secret     :: Secret
+                             , client_id      :: String
+                             , client_version :: String
+                             }
 
 -- JSON
 
@@ -59,9 +65,9 @@ decode' = convertResult . decode
 
 -- Session
 
-getSession :: Key -> Secret -> Token -> IO (H.Result Session)
-getSession key secret token = do 
-    result <- simpleHTTP $ Request (api_uri { uriQuery = sessionRequest key secret token }) GET [] ""
+getSession :: ClientConf -> Token -> IO (H.Result Session)
+getSession conf token = do 
+    result <- simpleHTTP $ Request (api_uri { uriQuery = sessionRequest conf token }) GET [] ""
     case result of
         (Left  err)      -> return $ Left err
         (Right response) -> do
@@ -71,13 +77,13 @@ getSession key secret token = do
                 _       -> return $ Left (ErrorMisc $ "Getting session failed" ++ rspBody response)
 
 
-sessionRequest :: Key -> Secret -> Token -> String
-sessionRequest key secret token = flattenParams $ M.insert "api_sig" (signRequest request secret) request
+sessionRequest :: ClientConf -> Token -> String
+sessionRequest conf token = flattenParams $ M.insert "api_sig" (signRequest request (api_secret conf)) request
     where (*) = (,)
           request = M.fromList 
                     [ "method"  * "auth.getSession"
                     , "token"   * token
-                    , "api_key" * key
+                    , "api_key" * api_key conf
                     ]
 
 signRequest :: Params -> Secret -> String
@@ -85,9 +91,9 @@ signRequest params secret = md5sum $ U.fromString $ concatMap (\(k, v) -> k ++ v
 
 -- Handshake
 
-getHandshake :: Key -> Secret -> Session -> IO (H.Result Handshake)
-getHandshake key secret (Session username session_key) = do
-    query  <- handshakeQuery key secret username session_key
+getHandshake :: ClientConf -> Session -> IO (H.Result Handshake)
+getHandshake conf session = do
+    query  <- handshakeQuery conf session
     result <- simpleHTTP $ Request (post_uri { uriQuery = query }) GET [] ""
     case result of
         (Left  err)      -> return $ Left err
@@ -98,18 +104,18 @@ getHandshake key secret (Session username session_key) = do
                 _       -> return $ Left (ErrorMisc $ "Getting handshake failed: " ++ rspBody response)
 
 
-handshakeQuery :: Key -> Secret -> String -> String -> IO String
-handshakeQuery key secret username session_key = do
+handshakeQuery :: ClientConf -> Session -> IO String
+handshakeQuery conf (Session username session_key) = do
     timestamp <- liftM (\(TOD unix _) -> show unix) getClockTime
     return $ flattenParams $ M.fromList -- Uhg
         [ "hs"         * "true"
         , "p"          * "1.2.1"
-        , "c"          * "lst" -- NOTE Please don't use this id if you're running a modified server.
-        , "v"          * "0.1"
+        , "c"          * client_id conf
+        , "v"          * client_version conf
         , "u"          * username
         , "t"          * timestamp
-        , "a"          * md5sum (U.fromString $ secret ++ timestamp)
-        , "api_key"    * key
+        , "a"          * md5sum (U.fromString $ (api_secret conf) ++ timestamp)
+        , "api_key"    * api_key conf
         , "sk"         * session_key
         ]
     where (*) = (,)
@@ -123,4 +129,3 @@ parseHandshake response = case lines response of
 
 flattenParams :: Params -> String
 flattenParams = concat . intersperse "&" . map (\(k, v) -> k ++ '=' :  v) . M.toList
-

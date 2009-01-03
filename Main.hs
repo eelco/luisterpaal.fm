@@ -13,25 +13,29 @@ import Cookies
 
 main :: IO ()
 main = do
-    (key, secret) <- getApiCreds
+    conf <- getClientConf
     simpleHTTP (nullConf { port = 8016 }) $ serve
-        [ withData    (\token -> [ anyRequest $ createSession key secret token ]) -- Callback URL
-        , withData    (\session -> [anyRequest $ shakeHands key secret session]) 
+        [ withData    (\token -> [ anyRequest $ createSession conf token ]) -- Callback URL
+        , withData    (\session -> [anyRequest $ shakeHands conf session]) 
 
         , root [ withDataFn userCookie (\user -> [ anyRequest $ respond ok $ welcomeBack user ])
-               , anyRequest $ respond ok (welcome key)
+               , anyRequest $ respond ok (welcome $ api_key conf)
                ]
 
         , dir "proxy" [ proxyServe ["*.audioscrobbler.com:80"] ]
         , fileServe [] "static"
         ]
 
--- Reading the Last.fm API credentials
-getApiCreds :: IO (Key, Secret)
-getApiCreds = do
-    args               <- getArgs
-    (key : secret : _) <- readFile (head (args ++ [".last.fm"])) >>= return . words
-    return (key, secret)
+-- Reading the Last.fm client config
+getClientConf :: IO ClientConf
+getClientConf = do
+    args                  <- getArgs
+    (key : secret : rest) <- readFile (head (args ++ [".last.fm"])) >>= return . words
+    let (id, version) = case rest of
+         []      -> ("tst", "1.0")
+         [i]     -> (i    , "1.0")
+         (i:v:_) -> (i    , v    )
+    return $ ClientConf key secret id version
 
 -- Parsing submitted data
 
@@ -48,18 +52,18 @@ userCookie = lookCookieValue "session" >>= return . takeWhile (/=':')
 
 -- Handlers
 
-createSession :: Key -> Secret -> Token -> Web Response
-createSession key secret token = do
-    session <- liftIO $ getSession key secret token
+createSession :: ClientConf -> Token -> Web Response
+createSession conf token = do
+    session <- liftIO $ getSession conf token
     case session of
         Left err                  -> respond badRequest $ layout (show err)
         Right (Session user skey) -> do
             addCookie 100000000 $ mkCookie "session" (user ++ ":" ++ skey)
             redir "."
 
-shakeHands :: Key -> Secret -> Session -> Web Response
-shakeHands key secret session = do
-    handshake <- liftIO $ getHandshake key secret session
+shakeHands :: ClientConf -> Session -> Web Response
+shakeHands conf session = do
+    handshake <- liftIO $ getHandshake conf session
     case handshake of
         Left err                         -> respond ok $ "{error:" ++ show (show err) ++ "}"
         Right (Handshake key npurl surl) -> respond ok $ "{handshake:" ++ show [key, npurl, surl] ++ "}"
