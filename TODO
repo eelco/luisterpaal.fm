@@ -10,6 +10,7 @@ Todo:
 [ ] P C - Handle response codes from now playing and submission protocol correctly
 [ ] P U - Get/create/mashup a logo for on the Last.fm page
 [ ] A E - Make the client id configurable
+[ ] P C - Add interface to 'love' tracks
 
 Done:
 [x] A C - Waiting for: a real client id
