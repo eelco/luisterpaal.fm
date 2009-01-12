@@ -5,6 +5,7 @@ Legend:
   B = Bug
 
 Todo:
+[ ] P U - Handle session creation errors, parse error and retry
 [ ] P U - Add a status div reporting on actions
 [ ] P U - Handle errors from the handshaking as much as possible (before throwing an error to the user)
 [ ] P C - Handle response codes from now playing and submission protocol correctly
