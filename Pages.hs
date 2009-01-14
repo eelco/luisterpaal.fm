@@ -29,8 +29,8 @@ welcome key = layout
     , h2 << "Scrobble al je geluisterpaal naar Last.fm!"
     , p  << "Lekker naar de 3VOOR12 Luisterpaal luisteren terwijl ook je Last.fm profiel gespekt wordt, nu kan het!"
     , h2 << "Zo werkt het"
-    , p  << ("Je hoeft " +++ strong << "niet" +++ " je Last.fm wachtwoord te geven, dat zou niet veilig zijn, dus daar hebben ze iets op bedacht.")
-    , p  << "Zodra je op de knop drukt, wordt je even omgeleid via Last.fm, waar je toestemming geeft aan de Luisterpaal Scrobbler om te scrobbelen."
+    , p  << ("Je hoeft " +++ strong << "niet" +++ " je Last.fm wachtwoord te geven, dat zou niet veilig zijn, dus daar hebben ze bij Last.fm iets op bedacht.")
+    , p  << "Zodra je op de knop drukt, word je even omgeleid via Last.fm, waar je toestemming geeft aan de Luisterpaal Scrobbler om te scrobbelen."
     , p  << "Daarna wordt je weer hier naartoe gestuurd, en zal de 3VOOR12 Luisterpaal verschijnen."
     , p  << "Om te voorkomen dat je deze handeling steeds moet uitvoeren, krijg je een cookie met daarin een code die uniek is voor de afspraak die jij, Last.fm en de Luisterpaal Scrobbler hebben gemaakt."
     , form ! [ action $ "http://www.last.fm/api/auth" ] << 
