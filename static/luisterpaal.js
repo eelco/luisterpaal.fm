@@ -104,6 +104,9 @@ function stop() {
     if (! track) return;
     // else
     
+    // If now playing info was not yet send, don't do it
+    clearTimeout(np_to);
+
     // Don't scrobble tracks that are too short
     if (track.l < 30) return;
     // else
