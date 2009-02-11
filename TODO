@@ -9,12 +9,13 @@ Todo:
 [ ] P U - Add a status div reporting on actions
 [ ] P U - Handle errors from the handshaking as much as possible (before throwing an error to the user)
 [ ] P C - Handle response codes from now playing and submission protocol correctly
-[ ] P U - Get/create/mashup a logo for on the Last.fm page
 [ ] P C - Add interface to 'love' tracks
 [ ] A E - Make the port configurable
 [ ] A B - Fix encoding problems (see http://www.last.fm/music/The+Kilimanjaro+Darkjazz+Ensemble/_/MuÌnchen)
 
 Done:
+[x] B A - Wait a bit before sending now playing info so it won't conflict with the scrobbling
+[x] P U - Get/create/mashup a logo for on the Last.fm page
 [x] A E - Make the client id configurable
 [x] A C - Waiting for: a real client id
 [x] P B - Fix reveiling of luisterpaal for Safari
