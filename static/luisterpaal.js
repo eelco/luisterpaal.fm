@@ -3,6 +3,7 @@ var sk;    // Session key
 var np;    // 'Now Playing' url
 var su;    // Submission url
 var track; // Currently playing track
+var np_to; // 'Now Playing' timeout
 
 // TODO Add a div with status messages.
 
@@ -80,17 +81,23 @@ function start(e) {
             , paused_since: undefined
             }
 
-    // TODO Check response
-    $.post("proxy/" + np
-          , { s: sk
-            , a: track.a
-            , t: track.t
-            , b: track.b
-            , l: track.l
-            , n: track.n
-            , m: ""
-            }
-          );
+    // Clear the call, mainly to prevent submitting data too soon (because if
+    // 'track' updated in the mean time that's okay).
+    clearTimeout(np_to);
+
+    np_to = setTimeout(function() {
+        // TODO Check response
+        $.post("proxy/" + np
+              , { s: sk
+                , a: track.a
+                , t: track.t
+                , b: track.b
+                , l: track.l
+                , n: track.n
+                , m: ""
+                }
+              );
+    }, 10000); // Set now playing info after 10 seconds.
 }
 
 function stop() {
