@@ -56,7 +56,7 @@ createSession :: ClientConf -> Token -> Web Response
 createSession conf token = do
     session <- liftIO $ getSession conf token
     case session of
-        Left err                  -> respond badRequest $ layout (show err)
+        Left err                  -> respond badRequest $ tryAgain (show err)
         Right (Session user skey) -> do
             addCookie 100000000 $ mkCookie "session" (user ++ ":" ++ skey)
             redir "."

@@ -2,6 +2,9 @@
     font-family: Helvetica, Verdana, sans-serif;
     color: #333;
 }
+a, a:link {
+    color: blue;
+}
 #luisterpaal {
     display: none;
 }
