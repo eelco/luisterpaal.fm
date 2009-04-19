@@ -2,27 +2,26 @@
 
 import Control.Monad
 import Control.Monad.Trans
+import Control.Monad.Reader
 import System.Environment
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Map as M
 
-import HAppS.Server
+import Happstack.Server
 import LastFm
 import Pages
-import Cookies
 
 main :: IO ()
 main = do
     conf <- getClientConf
-    simpleHTTP (nullConf { port = 8016 }) $ serve
-        [ withData    (\token -> [ anyRequest $ createSession conf token ]) -- Callback URL
-        , withData    (\session -> [anyRequest $ shakeHands conf session]) 
+    simpleHTTP (nullConf { port = 8016 }) $ msum
+        [ withData    (\token ->   anyRequest $ createSession conf token) -- Callback URL
+        , withData    (\session -> anyRequest $ shakeHands conf session) 
 
-        , root [ withDataFn userCookie (\user -> [ anyRequest $ respond ok $ welcomeBack user ])
+        , root $ withDataFn userCookie (\user -> anyRequest $ respond ok $ welcomeBack user)
                , anyRequest $ respond ok (welcome $ api_key conf)
-               ]
 
-        , dir "proxy" [ proxyServe ["*.audioscrobbler.com:80"] ]
+        , dir "proxy" $ proxyServe ["*.audioscrobbler.com:80"]
         , fileServe [] "static"
         ]
 
@@ -70,28 +69,14 @@ shakeHands conf session = do
 
 -- Utilities
 
-root :: Monad m => [ServerPartT m a] -> ServerPartT m a
-root handle = ServerPartT $ \rq -> case rqPaths rq of
-                [] -> unServerPartT (multi handle) rq
-                _  -> noHandle
+root :: (Monad m) => ServerPartT m a -> ServerPartT m a
+root handler = askRq >>= \rq -> if null $ rqPaths rq then handler else mzero
 
 redir :: String -> Web Response 
 redir u = found u (toResponse "")
 
 respond :: ToMessage a => (Response -> Web Response) -> a -> Web Response
 respond with = with . toResponse
-
-serve :: [ServerPart a] -> [ServerPart a]
-serve handle = [ ServerPartT $ \rq -> unServerPartT (multi handle) (fixCookies rq) ]
-
-fixCookies :: Request -> Request
-fixCookies req = 
-  if rqCookies req == [] 
-      then case lookHeader "cookie" $ rqHeaders req of
-              Nothing      -> req
-              Just cookies -> req  { rqCookies = cookiefy $ parseCookies cookies }
-      else req
-  where cookiefy cs = zip (map cookieName cs) cs
 
 lookHeader :: String -> Headers -> Maybe String
 lookHeader name headers = M.lookup (B.pack name) headers >>= return . B.unpack . head . hValue

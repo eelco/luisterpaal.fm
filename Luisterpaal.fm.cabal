@@ -10,7 +10,7 @@ Build-Type:         Simple
 Build-Depends:      base 
                   , containers 
                   , mtl 
-                  , HAppS-Server >= 0.9.3 
+                  , happstack-server == 0.2.* 
                   , parsec == 2.*
                   , bytestring == 0.9.*
                   , HTTP >= 3001
@@ -26,4 +26,4 @@ Data-Files:         static/luisterpaal.js
                   , static/style.css
 Executable:         Luisterpaal
 Main-Is:            Luisterpaal.hs
-Other-Modules:      LastFm, Pages, Cookies
+Other-Modules:      LastFm, Pages

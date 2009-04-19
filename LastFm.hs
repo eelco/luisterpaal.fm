@@ -15,8 +15,9 @@ import qualified Text.JSON as J
 import Text.JSON
 
 import Network.URI
-import qualified Network.HTTP as H
 import Network.HTTP
+import qualified Network.Stream as N
+import Network.Stream
 
 -- Configuration
 
@@ -58,14 +59,14 @@ lookupObj key = maybe (Error $ "Key '" ++ key ++ "' not found in object") readJS
               . lookup key 
               . fromJSObject
 
-decode' :: (JSON a) => String -> H.Result a
+decode' :: (JSON a) => String -> N.Result a
 decode' = convertResult . decode
     where convertResult (Ok a)    = Right a
           convertResult (Error e) = Left $ ErrorMisc e
 
 -- Session
 
-getSession :: ClientConf -> Token -> IO (H.Result Session)
+getSession :: ClientConf -> Token -> IO (N.Result Session)
 getSession conf token = do 
     result <- simpleHTTP $ Request (api_uri { uriQuery = sessionRequest conf token }) GET [] ""
     case result of
@@ -91,7 +92,7 @@ signRequest params secret = md5sum $ U.fromString $ concatMap (\(k, v) -> k ++ v
 
 -- Handshake
 
-getHandshake :: ClientConf -> Session -> IO (H.Result Handshake)
+getHandshake :: ClientConf -> Session -> IO (N.Result Handshake)
 getHandshake conf session = do
     query  <- handshakeQuery conf session
     result <- simpleHTTP $ Request (post_uri { uriQuery = query }) GET [] ""
@@ -120,7 +121,7 @@ handshakeQuery conf (Session username session_key) = do
         ]
     where (*) = (,)
 
-parseHandshake :: String -> H.Result Handshake
+parseHandshake :: String -> N.Result Handshake
 parseHandshake response = case lines response of
     ["OK", key, npurl, surl] -> Right $ Handshake key npurl surl
     err                      -> Left  $ ErrorMisc ("Handshake failed: " ++ (unlines err))
