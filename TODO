@@ -1,7 +1,7 @@
 Legend:
   U = User Experience     P = Project   
   C = Completeness        A = Action
-  E = Elegance
+  E = Elegance            I = Idea
   B = Bug
 
 Todo:
@@ -12,6 +12,9 @@ Todo:
 [ ] P C - Add interface to 'love' tracks
 [ ] A E - Make the port configurable
 [ ] A B - Fix encoding problems (see http://www.last.fm/music/The+Kilimanjaro+Darkjazz+Ensemble/_/MuÌnchen)
+[ ] I U - Add 'now listening' button to post to Twitter
+[ ] P U - Make the interface 'widget friendly' (to create a widget from Safari) 
+[ ] I C - Use Last.fm API to recommend Luisterpaal CD? (Can we get all the data needed for that?)
 
 Done:
 [x] B A - Wait a bit before sending now playing info so it won't conflict with the scrobbling
