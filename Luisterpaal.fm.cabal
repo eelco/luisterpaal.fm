@@ -6,11 +6,23 @@ License:            BSD3
 License-file:       LICENSE
 Copyright:          (c) 2009 Tupil
 Author:             Eelco Lempsink (eml [at] tupil.com)
+
+Cabal-Version:      >= 1.2
 Build-Type:         Simple
-Build-Depends:      base 
+Extra-Source-Files: README
+                  , TODO  
+Data-Files:         static/luisterpaal.js
+                  , static/style.css
+
+Executable  Luisterpaal
+  GHC-Options:     -Wall -threaded
+  Main-Is:          Luisterpaal.hs
+  Other-Modules:    LastFm, Pages
+  Build-Depends:    base 
                   , containers 
                   , mtl 
                   , happstack-server == 0.2.* 
+                  , happstack-fastcgi
                   , parsec == 2.*
                   , bytestring == 0.9.*
                   , HTTP >= 3001
@@ -20,10 +32,3 @@ Build-Depends:      base
                   , nano-md5 >= 0.1
                   , utf8-string >= 0.3
                   , xhtml >= 3000
-Extra-Source-Files: README
-                  , TODO  
-Data-Files:         static/luisterpaal.js
-                  , static/style.css
-Executable:         Luisterpaal
-Main-Is:            Luisterpaal.hs
-Other-Modules:      LastFm, Pages
