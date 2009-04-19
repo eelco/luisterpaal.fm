@@ -18,8 +18,9 @@ main = do
         [ withData    (\token ->   anyRequest $ createSession conf token) -- Callback URL
         , withData    (\session -> anyRequest $ shakeHands conf session) 
 
-        , root $ withDataFn userCookie (\user -> anyRequest $ respond ok $ welcomeBack user)
+        , root [ withDataFn userCookie (\user -> anyRequest $ respond ok $ welcomeBack user)
                , anyRequest $ respond ok (welcome $ api_key conf)
+               ]
 
         , dir "proxy" $ proxyServe ["*.audioscrobbler.com:80"]
         , fileServe [] "static"
@@ -69,8 +70,8 @@ shakeHands conf session = do
 
 -- Utilities
 
-root :: (Monad m) => ServerPartT m a -> ServerPartT m a
-root handler = askRq >>= \rq -> if null $ rqPaths rq then handler else mzero
+root :: (Monad m) => [ServerPartT m a] -> ServerPartT m a
+root handlers = askRq >>= \rq -> if null $ rqPaths rq then msum handlers else mzero
 
 redir :: String -> Web Response 
 redir u = found u (toResponse "")
