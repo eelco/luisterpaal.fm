@@ -1,5 +1,5 @@
 Name:               Luisterpaal-fm
-Version:            0.1
+Version:            0.2
 Synopsis:           Mashup of 3VOOR12 Luisterpaal + Last.fm
 Description:        Last.fm Scrobbler for the 3VOOR12 Luisterpaal
 License:            BSD3
@@ -7,23 +7,34 @@ License-file:       LICENSE
 Copyright:          (c) 2009 Tupil
 Author:             Eelco Lempsink (eml [at] tupil.com)
 Build-Type:         Simple
-Build-Depends:      base 
-                  , containers 
-                  , mtl 
-                  , happstack-server == 0.2.* 
-                  , parsec == 2.*
-                  , bytestring == 0.9.*
-                  , HTTP >= 3001
-                  , network >= 2.2
-                  , json >= 0.3
-                  , old-time == 1.*
-                  , nano-md5 >= 0.1
-                  , utf8-string >= 0.3
-                  , xhtml >= 3000
 Extra-Source-Files: README
                   , TODO  
 Data-Files:         static/luisterpaal.js
                   , static/style.css
-Executable:         Luisterpaal
-Main-Is:            Luisterpaal.hs
-Other-Modules:      LastFm, Pages
+
+Cabal-Version: >= 1.2
+
+Flag fastcgi
+    Description: Build the FastCGI version of the server
+    Default: True
+
+Executable Luisterpaal
+    Build-Depends:      base 
+                      , containers 
+                      , mtl 
+                      , happstack-server == 0.3.* 
+                      , parsec == 2.*
+                      , bytestring == 0.9.*
+                      , HTTP >= 3001
+                      , network >= 2.2
+                      , json >= 0.3
+                      , old-time == 1.*
+                      , nano-md5 >= 0.1
+                      , utf8-string >= 0.3
+                      , xhtml >= 3000
+    Other-Modules:      LastFm, Pages, Luisterpaal
+    if flag(fastcgi)
+      Main-Is:            FastCGI.hs
+      Build-Depends:      happstack-fastcgi
+    else
+      Main-Is:            Standalone.hs

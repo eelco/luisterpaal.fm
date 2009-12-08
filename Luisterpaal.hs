@@ -1,4 +1,5 @@
 {-# LANGUAGE TypeSynonymInstances #-}
+module Luisterpaal where
 
 import Control.Monad
 import Control.Monad.Trans
@@ -11,10 +12,10 @@ import Happstack.Server
 import LastFm
 import Pages
 
-main :: IO ()
-main = do
+server :: IO (ServerPart Response)
+server = do 
     conf <- getClientConf
-    simpleHTTP (nullConf { port = 8016 }) $ msum
+    return $ msum
         [ withData    (\token ->   anyRequest $ createSession conf token) -- Callback URL
         , withData    (\session -> anyRequest $ shakeHands conf session) 
 
