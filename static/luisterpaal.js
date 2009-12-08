@@ -81,6 +81,8 @@ function start(e) {
             , paused_since: undefined
             }
 
+    unvariousArtist()
+
     // Clear the call, mainly to prevent submitting data too soon (because if
     // 'track' updated in the mean time that's okay).
     clearTimeout(np_to);
@@ -150,6 +152,13 @@ function resume() {
 
 function now() {
     return Math.round(new Date().getTime() / 1000);
+}
+
+function unvariousArtist() {
+    if (track.a.match(/diverse artiesten|various artists/i) != null) {
+        track.a = track.t.split(' - ')[0];
+        track.t = track.t.split(' - ').slice(1).join(' - ');
+    }
 }
 
 // From: PPK, http://www.quirksmode.org/js/cookies.html#doccookie
