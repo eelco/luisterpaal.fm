@@ -11,12 +11,13 @@ Todo:
 [ ] P C - Handle response codes from now playing and submission protocol correctly
 [ ] P C - Add interface to 'love' tracks
 [ ] A E - Make the port configurable
-[ ] A B - Fix encoding problems (see http://www.last.fm/music/The+Kilimanjaro+Darkjazz+Ensemble/_/MuÌnchen)
 [ ] I U - Add 'now listening' button to post to Twitter
 [ ] P U - Make the interface 'widget friendly' (to create a widget from Safari) 
 [ ] I C - Use Last.fm API to recommend Luisterpaal CD? (Can we get all the data needed for that?)
 
 Done:
+[x] A B - Fix encoding problems (see http://www.last.fm/music/The+Kilimanjaro+Darkjazz+Ensemble/_/MuÌnchen)
+[x] A C - Handle 'various artists' albums
 [x] B A - Wait a bit before sending now playing info so it won't conflict with the scrobbling
 [x] P U - Get/create/mashup a logo for on the Last.fm page
 [x] A E - Make the client id configurable
