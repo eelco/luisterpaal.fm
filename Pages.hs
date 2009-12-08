@@ -4,8 +4,8 @@ import Text.XHtml.Strict
 
 layout :: HTML a => a -> Html
 layout content = header << [ thetitle << "Luisterpaal.fm :: 3VOOR12 Luisterpaal + Last.fm"
-                           , javascript "http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"
-                           , javascript "http://ajax.googleapis.com/ajax/libs/swfobject/2.1/swfobject.js"
+                           , javascript "http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"
+                           , javascript "http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"
                            , javascript "http://luisterpaal.uservoice.com/pages/general/widgets/tab.js?alignment=right&color=00BCBA"
                            , javascript "luisterpaal.js"
                            , stylesheet "style.css"
