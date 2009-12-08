@@ -71,9 +71,9 @@ function start(e) {
 
     var t = e.track;
 
-    track = { a: unescape(t.artist)
-            , t: unescape(t.name)
-            , b: unescape(t.album)
+    track = { a: decodeURIComponent(t.artist)
+            , t: decodeURIComponent(t.name)
+            , b: decodeURIComponent(t.album)
             , l: t.duration
             , n: t.trackNumber
             , i: now()
@@ -175,6 +175,6 @@ function readCookie(name) {
 
 function eraseCookie(name) {
     var date = new Date();
-	date.setTime(date.getTime() - 3600);
-	document.cookie = name+"="+";expires="+date.toGMTString()+"; path=/";
+    date.setTime(date.getTime() - 3600);
+    document.cookie = name+"="+";expires="+date.toGMTString()+"; path=/";
 }
