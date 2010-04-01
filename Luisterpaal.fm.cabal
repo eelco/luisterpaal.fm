@@ -22,7 +22,7 @@ Executable Luisterpaal
     Build-Depends:      base 
                       , containers 
                       , mtl 
-                      , happstack-server == 0.3.* 
+                      , happstack-server == 0.4.* 
                       , parsec == 2.*
                       , bytestring == 0.9.*
                       , HTTP >= 3001
