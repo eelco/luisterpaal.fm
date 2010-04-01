@@ -156,8 +156,8 @@ function now() {
 
 function unvariousArtist() {
     if (track.a.match(/diverse artiesten|various artists/i) != null) {
-        track.a = track.t.split(' - ')[0];
-        track.t = track.t.split(' - ').slice(1).join(' - ');
+        track.a = track.t.split(/ - | – /)[0];
+        track.t = track.t.split(/ - | – /).slice(1).join(' - ');
     }
 }
 
