@@ -23,7 +23,7 @@ server = do
                , anyRequest $ respond ok (welcome $ api_key conf)
                ]
 
-        , dir "proxy" $ proxyServe ["*.audioscrobbler.com:80"]
+        , dir "proxy" $ proxyServe ["*.audioscrobbler.com:80", "195.24.233.58:80"]
         , fileServe [] "static"
         ]
 
